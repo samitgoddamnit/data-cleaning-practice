@@ -1,0 +1,143 @@
+{
+  "asOf": "2026-09-30",
+  "totals": {
+    "drawnGbp": 389686000.0,
+    "limitGbp": 598443000.0,
+    "expectedLossGbp": 4516218,
+    "loanCount": 74
+  },
+  "borrowers": [
+    {
+      "borrower": "Acme Freight Ltd",
+      "sector": "Transport",
+      "country": "GB",
+      "ratingBucket": "IG",
+      "drawnGbp": 18716000.0,
+      "limitGbp": 32526000.0,
+      "expectedLossGbp": 310764,
+      "loanCount": 2,
+      "sharePct": 4.8
+    },
+    {
+      "borrower": "Bluefin Property plc",
+      "sector": "Real Estate",
+      "country": "DE",
+      "ratingBucket": "IG",
+      "drawnGbp": 19088000.0,
+      "limitGbp": 36084000.0,
+      "expectedLossGbp": 50259,
+      "loanCount": 7,
+      "sharePct": 4.9
+    },
+    {
+      "borrower": "Cobalt Power SA",
+      "sector": "Energy",
+      "country": "NL",
+      "ratingBucket": "IG",
+      "drawnGbp": 5965000.0,
+      "limitGbp": 10938000.0,
+      "expectedLossGbp": 99676,
+      "loanCount": 2,
+      "sharePct": 1.53
+    },
+    {
+      "borrower": "Delta Foods BV",
+      "sector": "Consumer Goods",
+      "country": "GB",
+      "ratingBucket": "NR",
+      "drawnGbp": 69736000.0,
+      "limitGbp": 85533000.0,
+      "expectedLossGbp": 845569,
+      "loanCount": 1,
+      "sharePct": 17.9
+    },
+    {
+      "borrower": "Ember Hotels Ltd",
+      "sector": "Hospitality",
+      "country": "DE",
+      "ratingBucket": "SubIG",
+      "drawnGbp": 46040000.0,
+      "limitGbp": 87982000.0,
+      "expectedLossGbp": 412686,
+      "loanCount": 9,
+      "sharePct": 11.81
+    },
+    {
+      "borrower": "Fjord Shipping AS",
+      "sector": "Transport",
+      "country": "DE",
+      "ratingBucket": "IG",
+      "drawnGbp": 9821000.0,
+      "limitGbp": 15012000.0,
+      "expectedLossGbp": 118347,
+      "loanCount": 11,
+      "sharePct": 2.52
+    },
+    {
+      "borrower": "Garnet Telecom plc",
+      "sector": "Telecoms",
+      "country": "GB",
+      "ratingBucket": "NR",
+      "drawnGbp": 11506000.0,
+      "limitGbp": 20969000.0,
+      "expectedLossGbp": 24536,
+      "loanCount": 4,
+      "sharePct": 2.95
+    },
+    {
+      "borrower": "Hazel Care Homes Ltd",
+      "sector": "Healthcare",
+      "country": "FR",
+      "ratingBucket": "SubIG",
+      "drawnGbp": 36145000.0,
+      "limitGbp": 47195000.0,
+      "expectedLossGbp": 438283,
+      "loanCount": 8,
+      "sharePct": 9.28
+    },
+    {
+      "borrower": "Iris Data Ltd",
+      "sector": "Technology",
+      "country": "DE",
+      "ratingBucket": "NR",
+      "drawnGbp": 22306000.0,
+      "limitGbp": 35735000.0,
+      "expectedLossGbp": 352809,
+      "loanCount": 2,
+      "sharePct": 5.72
+    },
+    {
+      "borrower": "Juniper Retail Ltd",
+      "sector": "Retail",
+      "country": "FR",
+      "ratingBucket": "NR",
+      "drawnGbp": 41048000.0,
+      "limitGbp": 53826000.0,
+      "expectedLossGbp": 391099,
+      "loanCount": 10,
+      "sharePct": 10.53
+    },
+    {
+      "borrower": "Kite Chemicals AG",
+      "sector": "Chemicals",
+      "country": "NL",
+      "ratingBucket": "IG",
+      "drawnGbp": 49371000.0,
+      "limitGbp": 88315000.0,
+      "expectedLossGbp": 759606,
+      "loanCount": 3,
+      "sharePct": 12.67
+    },
+    {
+      "borrower": "Lark Construction Ltd",
+      "sector": "Construction",
+      "country": "GB",
+      "ratingBucket": "NR",
+      "drawnGbp": 59944000.0,
+      "limitGbp": 84328000.0,
+      "expectedLossGbp": 712584,
+      "loanCount": 15,
+      "sharePct": 15.38
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+sector,lgd_pct,rationale
+Real Estate,35,Secured on property
+Utilities,30,Regulated assets
+Energy,40,Asset-backed but volatile values
+Transport,40,Secured on vehicles/vessels
+Manufacturing,45,Partly secured
+Chemicals,45,Partly secured
+Mining,50,Specialised assets
+Healthcare,45,Partly secured
+Hospitality,50,Cyclical; property-backed
+Retail,55,Mostly unsecured
+Consumer Goods,45,Partly secured
+Telecoms,40,Infrastructure assets
+Technology,55,Mostly intangible assets
+Construction,60,High recovery uncertainty
+Agriculture,45,Partly secured

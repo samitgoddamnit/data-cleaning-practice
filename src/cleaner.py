@@ -4,8 +4,11 @@ import datetime
 from pycountry import countries
 import iso4217parse
 import re
+from pathlib import Path
 
-file_name = r'C:\Users\joshu\Documents\Project Stuff\Convergence Practice\convergence_practice_round2\convergence_practice_round2\tapes\westmere_loan_tape_2026Q3.csv'
+data_dir = Path(__file__).resolve().parent.parent / 'practice_round2' / 'practice_round2'
+
+file_name = data_dir / 'tapes' / 'westmere_loan_tape_2026Q3.csv'
 
 with open(file_name,'rb') as f:
      file_encoding = chardet.detect(f.read())
@@ -50,7 +53,7 @@ df['ccy'] = df['ccy'].apply(get_currency)
 # need to multiply by 1000, then convert according to currency
 #read in exchange rates, convert limits to GBP
 
-exchange_rates = r'C:\Users\joshu\Documents\Project Stuff\Convergence Practice\convergence_practice_round2\convergence_practice_round2\reference\fx_used.csv'
+exchange_rates = data_dir / 'reference' / 'fx_used.csv'
 with open(exchange_rates,'rb') as f:
      file_encoding = chardet.detect(f.read())
 fx = pd.read_csv(exchange_rates,encoding = file_encoding['encoding'])
@@ -69,7 +72,7 @@ df['drawn_amount'] = df['drawn_amount'].str.replace(regex,'',regex=True)
 df['drawn_amount'] = (pd.to_numeric(df['drawn_amount'], errors='coerce') * df['ccy'].map(rates_map)).round(2)
 
 
-print(df.loc[60:75,:])
+print(df.loc[75:120,:])
 
 # print(df['ccy'].value_counts())
 

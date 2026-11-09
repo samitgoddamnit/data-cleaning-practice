@@ -1,0 +1,100 @@
+=== EMAIL 1 ===
+From: j.okafor@northbank.example
+To: deals@insurer.example
+Date: Mon, 12 Oct 2026 09:14
+Subject: New cover request - Harlow
+
+Morning both,
+
+Following our call - we're looking for cover on a new facility for Harlow Logisitcs. Details:
+
+Facility: £12m term loan
+Tenor: 5 yrs from drawdown (expected 1st Nov)
+Pricing: SONIA + 275bps
+Rating: BBB- (S&P)
+
+We'd like you to take 40% of the risk. Shout if you need the full credit pack.
+
+Thanks,
+James
+
+=== EMAIL 2 ===
+From: p.desai@westmere.example
+To: deals@insurer.example
+Date: Tue, 13 Oct 2026 16:02
+Subject: Two for you
+
+Hi,
+
+Two new ones from us this month:
+
+1) Kingsway Student Living Ltd - GBP 6.5 million, fixed at 7.10%, seven-year term, starting 2 November 2026. Rated BB+. Cover sought: 50%.
+
+2) Northgate Hotels - £3,250,000 revolving facility, priced at SONIA + 4.10%, 3 years from 15/11/2026. Moody's have them at B2. We'd want 60% covered on this one.
+
+Best,
+Priya
+
+=== EMAIL 3 ===
+From: m.becker@rheinland-kredit.example
+To: deals@insurer.example
+Date: Wed, 14 Oct 2026 11:47
+Subject: Anfrage / request - Zeller Autoteile
+
+Dear team,
+
+please find our request below (English summary):
+
+Kreditnehmer / Borrower: ZELLER AUTOTEILE GMBH
+Volumen / Amount: EUR 8,5 Mio.
+Laufzeit / Tenor: 5 Jahre (5 years), Beginn 01.12.2026
+Zinssatz / Rate: EURIBOR + 3,25 %
+Rating: Ba3 (Moody's)
+Gewünschte Deckung / Requested cover: 50 %
+
+Mit freundlichen Grüßen
+Markus Becker
+
+=== EMAIL 4 ===
+From: j.okafor@northbank.example
+To: deals@insurer.example
+Date: Thu, 15 Oct 2026 10:30
+Subject: RE: RE: Corvid Energy - new facility
+
+Apologies all - correction to the below. Credit committee came back overnight: facility is now €18m and the margin is 250bps, not 225. Everything else unchanged.
+
+James
+
+-----Original Message-----
+From: j.okafor@northbank.example
+Sent: Mon, 12 Oct 2026 14:05
+Subject: RE: Corvid Energy - new facility
+
+Hi - terms for Corvid Energy SA as discussed: EUR 20,000,000 term loan, 7 year tenor, EURIBOR + 225bps, start date 1 December 2026. Rated BBB+ by S&P. We're looking for 35% cover.
+
+James
+
+=== EMAIL 5 ===
+From: p.desai@westmere.example
+To: deals@insurer.example
+Date: Fri, 16 Oct 2026 08:55
+Subject: Quayside - early heads up
+
+Hi,
+
+Early heads-up: Quayside Leisure are looking at a £2m working capital line with us. Tenor and pricing still TBC - I'll come back once credit have looked at it. Cover would probably be around a third.
+
+Priya
+
+=== EMAIL 6 ===
+From: m.becker@rheinland-kredit.example
+To: deals@insurer.example
+Date: Fri, 16 Oct 2026 17:20
+Subject: Q4 loan tape timing
+
+Dear team,
+
+a short note that our Q4 2026 loan tape will be delivered on 15 January 2027 in the usual format. Please let me know if you need anything sooner.
+
+Kind regards,
+Markus
