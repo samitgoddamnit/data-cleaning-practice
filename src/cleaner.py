@@ -7,6 +7,7 @@ import iso4217parse
 import re
 from pathlib import Path
 from csv import writer
+from difflib import get_close_matches
 
 
 data_dir = Path(__file__).resolve().parent.parent / 'practice_round2' / 'practice_round2'
@@ -76,46 +77,99 @@ df['drawn_amount'] = (pd.to_numeric(df['drawn_amount'], errors='coerce') * df['c
 
 
 ##loading sectors
-# sectors_legend = data_dir / 'reference' / 'lgd_by_sector.csv'
-# with open(sectors_legend,'rb') as f:
-#      file_encoding = chardet.detect(f.read())
-# scdf = pd.read_csv(sectors_legend,encoding = file_encoding['encoding'])
-# scdf['sector'] = scdf['sector'].map(lambda x: x.strip().upper())
+sectors_legend = data_dir / 'reference' / 'lgd_by_sector.csv'
+with open(sectors_legend,'rb') as f:
+     file_encoding = chardet.detect(f.read())
+scdf = pd.read_csv(sectors_legend,encoding = file_encoding['encoding'])
+#upper case and collapse runs of whitespace to single spaces
+def normalise(text):
+     return ' '.join(text.upper().split())
+
+#official sector names, keyed the same way industry is normalised below
+valid_sectors = {normalise(name): name for name in scdf['sector']}
+
+#keep the raw obligor so it can be offered as the display name
+df['obligor_raw'] = df['obligor']
 
 #normalise names for processing
-df['industry'] = df['industry'].str.upper().str.replace(r'\s+', '', regex=True).replace('', np.nan)
-df['obligor'] = df['obligor'].str.upper().str.replace(r'\s+', '', regex=True).replace('', np.nan)
+df['industry'] = df['industry'].str.upper().str.split().str.join(' ').replace('', np.nan)
+df['obligor'] = df['obligor'].str.upper().str.split().str.join(' ').replace('', np.nan)
 
 alias_to_canon_csv = data_dir / 'aliases' / 'alias_to_canon.csv'
 canon_to_display_csv = data_dir / 'aliases' / 'canon_to_display.csv'
-canon_to_industry_csv = data_dir / 'aliases' / 'canon_to_industry.csv'
+alias_to_industry_csv = data_dir / 'aliases' / 'alias_to_industry.csv'
+
+a2c = pd.read_csv(alias_to_canon_csv).set_index('alias')['canonical'].to_dict()
+c2d = pd.read_csv(canon_to_display_csv).set_index('canon')['display'].to_dict()
+a2i = pd.read_csv(alias_to_industry_csv).set_index('alias')['industry'].to_dict()
+
+def process_names(row):
+     #blank obligors are left blank for exceptions
+     obligor_alias = row['obligor']
+     if pd.isna(obligor_alias):
+          canon = np.nan
+          canon_display = np.nan
+     else:
+          if obligor_alias not in a2c:
+               ##add the alias to canon mapping, suggesting close existing canon names
+               suggestions = get_close_matches(obligor_alias, set(a2c.values()), n=3)
+               default = suggestions[0] if suggestions else obligor_alias
+               print(f"input the canon mapping for {obligor_alias}")
+               print(f"suggestions: {suggestions}, enter to use {default}, or type a new canon name")
+               canon = normalise(input()) or default
+               alias_canon_mapping = [obligor_alias,canon]
+               with open(alias_to_canon_csv,'a',newline='',encoding='utf-8') as f:
+                    writer_obj = writer(f)
+                    writer_obj.writerow(alias_canon_mapping)
+               a2c[obligor_alias] = canon
+          canon = a2c[obligor_alias]
+
+          if canon not in c2d:
+               raw = row['obligor_raw'].strip()
+               print(f"input display name for {canon}, enter to use {raw}")
+               display = input().strip() or raw
+               canon_display_mapping = [canon,display]
+               with open(canon_to_display_csv,'a',newline='',encoding='utf-8') as f:
+                    writer_obj = writer(f)
+                    writer_obj.writerow(canon_display_mapping)
+               c2d[canon] = display
+          canon_display = c2d[canon]
+
+     #blank industries are left blank for exceptions
+     industry_alias = row['industry']
+     if pd.isna(industry_alias):
+          industry = np.nan
+     elif industry_alias in valid_sectors:
+          industry = valid_sectors[industry_alias]
+     else:
+          if industry_alias not in a2i:
+               answer = ''
+               while answer not in valid_sectors:
+                    print(f"input industry for {industry_alias}, options: {sorted(valid_sectors.values())}")
+                    answer = normalise(input())
+               alias_industry_mapping = [industry_alias,valid_sectors[answer]]
+               with open(alias_to_industry_csv,'a',newline='',encoding='utf-8') as f:
+                    writer_obj = writer(f)
+                    writer_obj.writerow(alias_industry_mapping)
+               a2i[industry_alias] = valid_sectors[answer]
+          industry = a2i[industry_alias]
+
+     row['obligor'] = canon_display
+     row['obligor_canon'] = canon
+     row['industry'] = industry
+
+     return row
 
 
+df = df.apply(process_names,axis=1)
+df = df.drop(columns='obligor_raw')
 
-##better to use a database here? and then cache aliases. That way, I can be more efficient if something like hotels & leisure comes up again
-##going to use a csv file that I read into sector_aliases at the beginning, then use apply on each row
-sector_aliases_csv = data_dir / 'aliases' / 'sector_aliases.csv'
-sector_aliases = pd.read_csv(sector_aliases_csv).set_index('alias')['canonical'].to_dict()
-def process_sector(name):
-     if name not in sector_aliases:
-          print(f"input canonical form for {name}")
-          canon = input()
-          new_row = [name,canon]
-          with open(sector_aliases_csv,'a',newline='') as f:
-               writer_obj = writer(f)
-               writer_obj.writerow(new_row)
-          sector_aliases[name] = canon
-     return sector_aliases[name] or np.nan
-df['industry'] = df['industry'].apply(process_sector)
-
-
-
-# print(df.loc[75:120,:])
+print(df.loc[75:120,:])
 
 # print(df['ccy'].value_counts())
 
-for column in df.columns:
-    print(column,':',pd.api.types.infer_dtype(df[column]))
+# for column in df.columns:
+#     print(column,':',pd.api.types.infer_dtype(df[column]))
 
-for column in fx.columns:
-     print(column,':',pd.api.types.infer_dtype(fx[column]))
+# for column in fx.columns:
+#      print(column,':',pd.api.types.infer_dtype(fx[column]))
