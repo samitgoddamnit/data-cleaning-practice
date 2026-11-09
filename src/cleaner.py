@@ -21,7 +21,7 @@ with open(file_name,'rb') as f:
 df = pd.read_csv(file_name,encoding = file_encoding['encoding'])
 pd.set_option('display.max_rows', None)
 
-print(df.loc[:,'drawn_amount'])
+# print(df.loc[:,'drawn_amount'])
 
 #fixing obligor
 # print(df.loc[72:88,:])
@@ -91,7 +91,6 @@ valid_sectors = {normalise(name): name for name in scdf['sector']}
 #keep the raw obligor so it can be offered as the display name
 df['obligor_raw'] = df['obligor']
 
-#normalise names for processing
 df['industry'] = df['industry'].str.upper().str.split().str.join(' ').replace('', np.nan)
 df['obligor'] = df['obligor'].str.upper().str.split().str.join(' ').replace('', np.nan)
 
@@ -135,7 +134,7 @@ def process_names(row):
                c2d[canon] = display
           canon_display = c2d[canon]
 
-     #blank industries are left blank for exceptions
+
      industry_alias = row['industry']
      if pd.isna(industry_alias):
           industry = np.nan
@@ -163,6 +162,112 @@ def process_names(row):
 
 df = df.apply(process_names,axis=1)
 df = df.drop(columns='obligor_raw')
+
+##rate types
+valid_rate_types = {'FIXED', 'FLOATING'}
+rate_types_csv = data_dir / 'aliases' / 'rate_types_dict.csv'
+rate_types = pd.read_csv(rate_types_csv).set_index('alias')['canonical'].to_dict()
+
+def process_rate_type(rate_type_alias):
+     #blank rate types are left blank for exceptions
+     if pd.isna(rate_type_alias):
+          return np.nan
+     rate_type_alias = normalise(rate_type_alias)
+     if rate_type_alias in valid_rate_types:
+          return rate_type_alias
+     if rate_type_alias not in rate_types:
+          #cutoff=0 so there is always a default, whichever of the two is closer
+          default = get_close_matches(rate_type_alias, sorted(valid_rate_types), n=1, cutoff=0)[0]
+          answer = ''
+          while answer not in valid_rate_types and answer != '-':
+               print(f"input rate type for {rate_type_alias}, options: {sorted(valid_rate_types)}, enter to use {default}, - to leave empty")
+               answer = normalise(input()) or default
+          #'-' saves an empty mapping, so the alias stays blank without asking again
+          canonical = '' if answer == '-' else answer
+          rate_type_mapping = [rate_type_alias,canonical]
+          with open(rate_types_csv,'a',newline='',encoding='utf-8') as f:
+               writer_obj = writer(f)
+               writer_obj.writerow(rate_type_mapping)
+          rate_types[rate_type_alias] = canonical or np.nan
+     return rate_types[rate_type_alias]
+df['rate_type'] = df['rate_type'].apply(process_rate_type)
+
+##statuses
+#official statuses, keyed the same way the tape is normalised
+valid_statuses = {normalise(status): status for status in ['Active', 'Arrears', 'Defaulted', 'Repaid']}
+statuses_csv = data_dir / 'aliases' / 'status_dict.csv'
+statuses = pd.read_csv(statuses_csv).set_index('alias')['canonical'].to_dict()
+
+def process_status(status_alias):
+     #blank statuses are left blank for exceptions
+     if pd.isna(status_alias):
+          return np.nan
+     status_alias = normalise(status_alias)
+     if status_alias in valid_statuses:
+          return valid_statuses[status_alias]
+     if status_alias not in statuses:
+          #cutoff=0 so there is always a default, whichever status is closest
+          default = get_close_matches(status_alias, sorted(valid_statuses), n=1, cutoff=0)[0]
+          answer = ''
+          while answer not in valid_statuses and answer != '-':
+               print(f"input status for {status_alias}, options: {sorted(valid_statuses.values())}, enter to use {valid_statuses[default]}, - to leave empty")
+               answer = normalise(input()) or default
+          #'-' saves an empty mapping, so the alias stays blank without asking again
+          canonical = '' if answer == '-' else valid_statuses[answer]
+          status_mapping = [status_alias,canonical]
+          with open(statuses_csv,'a',newline='',encoding='utf-8') as f:
+               writer_obj = writer(f)
+               writer_obj.writerow(status_mapping)
+          statuses[status_alias] = canonical or np.nan
+     return statuses[status_alias]
+df['status'] = df['status'].apply(process_status)
+
+
+##ext_rating
+pd_by_rating = data_dir / 'reference' / 'pd_by_rating.csv'
+with open(pd_by_rating,'rb') as f:
+     file_encoding = chardet.detect(f.read())
+pddf = pd.read_csv(pd_by_rating,encoding = file_encoding['encoding'])
+sp_scale = list(pddf.sort_values('rating_rank')['sp_rating'])
+valid_ratings = set(sp_scale) | {'NR'}
+ratings_csv = data_dir / 'aliases' / 'ratings_dict.csv'
+ratings = pd.read_csv(ratings_csv).set_index('alias')['canonical'].to_dict()
+
+def process_rating(rating_alias):
+     #blank ratings are left blank for exceptions
+     if pd.isna(rating_alias):
+          return np.nan
+     rating_alias = normalise(rating_alias)
+     if rating_alias in valid_ratings:
+          return rating_alias
+     if rating_alias not in ratings:
+          default = get_close_matches(rating_alias, sorted(valid_ratings), n=1, cutoff=0)[0]
+          answer = ''
+          while answer not in valid_ratings and answer != '-':
+               print(f"input S&P rating for {rating_alias}, options: {sp_scale + ['NR']}, enter to use {default}, - to leave empty")
+               answer = normalise(input()) or default
+          canonical = '' if answer == '-' else answer
+          rating_mapping = [rating_alias,canonical]
+          with open(ratings_csv,'a',newline='',encoding='utf-8') as f:
+               writer_obj = writer(f)
+               writer_obj.writerow(rating_mapping)
+          ratings[rating_alias] = canonical or np.nan
+     return ratings[rating_alias]
+df['ext_rating'] = df['ext_rating'].apply(process_rating)
+
+#rating bucket, BBB- and above is investment grade
+def get_rating_bucket(rating):
+     if rating in sp_scale:
+          if sp_scale.index(rating) <= sp_scale.index('BBB-'):
+               return 'IG'
+          return 'SubIG'
+     return 'NR'
+df['rating_bucket'] = df['ext_rating'].apply(get_rating_bucket)
+
+
+
+
+
 
 print(df.loc[75:120,:])
 
